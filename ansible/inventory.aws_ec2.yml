@@ -1,0 +1,11 @@
+plugin: amazon.aws.aws_ec2
+regions:
+  - ca-central-1
+
+filters:
+  instance-id:
+    - i-0899d0aaee4435e3f
+
+compose:
+  ansible_connection: "'aws_ssm'"
+  ansible_aws_ssm_region: "'ca-central-1'"

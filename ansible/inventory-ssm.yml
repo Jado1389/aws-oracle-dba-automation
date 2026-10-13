@@ -1,0 +1,7 @@
+all:
+  hosts:
+    oracle_dba:
+      ansible_host: i-0899d0aaee4435e3f
+      ansible_connection: amazon.aws.aws_ssm
+      ansible_aws_ssm_region: ca-central-1
+      ansible_aws_ssm_bucket_name: aws-oracle-dba-automation-539893177650

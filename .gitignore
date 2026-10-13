@@ -1,0 +1,59 @@
+# Terraform local files and state
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Sensitive Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Secrets and private keys
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+vault-password-file
+
+# Ansible
+ansible-venv/
+.ansible/
+*.retry
+vault.yml
+vault.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Logs, backups, and generated files
+*.log
+backups/
+*.dump
+*.sql.gz
+
+# Editor and operating system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Locally installed tools and virtual environments
+/tools/ansible-venv/
+/tools/terraform
+/tools/terraform_*.zip

@@ -1,0 +1,54 @@
+---
+- name: Configure Oracle DBA automation server
+  hosts: oracle_dba
+  become: true
+
+  tasks:
+    - name: Install DBA automation utilities
+      ansible.builtin.dnf:
+        name:
+          - vim-enhanced
+          - wget
+          - unzip
+          - jq
+          - git
+          - python3-boto3
+        state: present
+
+    - name: Create 2 GB swap file
+      ansible.builtin.command:
+        cmd: fallocate -l 2G /swapfile
+      args:
+        creates: /swapfile
+
+    - name: Set swap file permissions
+      ansible.builtin.file:
+        path: /swapfile
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Format swap file
+      ansible.builtin.command:
+        cmd: mkswap /swapfile
+      when: ansible_facts.swaptotal_mb == 0
+
+    - name: Enable swap file
+      ansible.builtin.command:
+        cmd: swapon /swapfile
+      when: ansible_facts.swaptotal_mb == 0
+
+    - name: Persist swap file after reboot
+      ansible.builtin.lineinfile:
+        path: /etc/fstab
+        regexp: '^/swapfile\s'
+        line: '/swapfile none swap sw 0 0'
+        state: present
+
+    - name: Display server hostname
+      ansible.builtin.command: hostname
+      register: hostname_result
+
+    - name: Show server hostname
+      ansible.builtin.debug:
+        msg: "DBA automation server: {{ hostname_result.stdout }}"

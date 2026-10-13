@@ -1,0 +1,23 @@
+---
+- name: Schedule server health monitoring
+  hosts: oracle_dba
+  become: true
+
+  tasks:
+    - name: Ensure cron is installed
+      ansible.builtin.dnf:
+        name: cronie
+        state: present
+
+    - name: Ensure cron service is enabled and running
+      ansible.builtin.service:
+        name: crond
+        state: started
+        enabled: true
+
+    - name: Run server health monitoring every five minutes
+      ansible.builtin.cron:
+        name: "Oracle DBA server health monitoring"
+        user: root
+        minute: "*/5"
+        job: "/usr/bin/python3 /opt/oracle-dba-monitoring/server_health.py >> /var/log/oracle-dba-monitoring.log 2>&1"

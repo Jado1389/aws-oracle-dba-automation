@@ -1,0 +1,21 @@
+---
+- name: Deploy server health monitoring script
+  hosts: oracle_dba
+  become: true
+
+  tasks:
+    - name: Create monitoring directory
+      ansible.builtin.file:
+        path: /opt/oracle-dba-monitoring
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy server health monitoring script
+      ansible.builtin.copy:
+        src: ../python/server_health.py
+        dest: /opt/oracle-dba-monitoring/server_health.py
+        owner: root
+        group: root
+        mode: '0755'
