@@ -57,3 +57,10 @@ Thumbs.db
 /tools/ansible-venv/
 /tools/terraform
 /tools/terraform_*.zip
+
+# Local tools and virtual environments
+/tools/
+/python/server_health_before_cloudwatch.py
+/python/server_health_v1.py
+/python/server_health_v2.py
+/python/server_health_v3.py
