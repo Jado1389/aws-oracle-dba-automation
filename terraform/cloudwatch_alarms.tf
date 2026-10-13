@@ -12,7 +12,7 @@ resource "aws_cloudwatch_metric_alarm" "oracle_cpu_high" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    InstanceId = aws_instance.oracle_dba.id
+    InstanceId = data.aws_instance.oracle_26ai.id
   }
 }
 
@@ -30,7 +30,7 @@ resource "aws_cloudwatch_metric_alarm" "oracle_memory_high" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    InstanceId = aws_instance.oracle_dba.id
+    InstanceId = data.aws_instance.oracle_26ai.id
   }
 }
 
@@ -48,6 +48,6 @@ resource "aws_cloudwatch_metric_alarm" "oracle_disk_high" {
   treat_missing_data  = "notBreaching"
 
   dimensions = {
-    InstanceId = aws_instance.oracle_dba.id
+    InstanceId = data.aws_instance.oracle_26ai.id
   }
 }
