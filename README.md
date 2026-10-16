@@ -65,3 +65,17 @@ Note: The SNS test validates email delivery. It does not independently prove tha
 
 ## Repository contents
 The repository contains Terraform configuration and database administration monitoring scripts. Review the project directories for implementation details.
+
+## Architecture Diagram
+
+```mermaid
+flowchart TD
+    A["Terraform"] --> B["AWS Infrastructure"]
+    B --> C["Oracle Database 26ai"]
+    C --> D["Python Monitoring"]
+    D --> E["Amazon CloudWatch"]
+    E --> F{"Threshold Breached?"}
+    F -->|Yes| G["CloudWatch Alarm"]
+    G --> H["Amazon SNS"]
+    H --> I["Email Notification"]
+    F -->|No| D
