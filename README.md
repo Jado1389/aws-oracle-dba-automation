@@ -1,65 +1,67 @@
-# AWS Oracle DBA Automation and Monitoring
+# AWS Oracle DBA Automation
 
-## Project Overview
-This project demonstrates AWS infrastructure automation and Oracle database monitoring using Terraform, Python, Ansible, and Amazon CloudWatch.
-
-## Technology Stack
-- AWS EC2 and CloudWatch
-- Terraform infrastructure as code
-- Oracle Database 26ai Free
-- Python and Boto3
-- Linux and cron
-- Ansible
-- Git and GitHub
+## Overview
+A hands-on database administration project demonstrating AWS infrastructure automation, Oracle database health monitoring, CloudWatch metrics and alarms, and SNS email notifications.
 
 ## Architecture
-1. Terraform manages AWS infrastructure resources.
-2. Oracle Database 26ai runs in the lab environment.
-3. Python scripts collect server and database health metrics.
-4. Cron schedules server monitoring every five minutes.
-5. Boto3 publishes custom metrics to CloudWatch.
-6. CloudWatch alarms monitor CPU, memory, and disk utilization.
+- **AWS:** Amazon EC2 lab environment in ca-central-1.
+- **Database:** Oracle 26ai lab running in the `oracle-free` container.
+- **Terraform:** Infrastructure-as-code for AWS networking and CloudWatch alarm configuration.
+- **Python:** Server and Oracle database health-monitoring automation.
+- **Amazon CloudWatch:** Centralized custom metrics and threshold-based alarms.
+- **Amazon SNS:** Email notifications for monitoring alerts.
 
-## Server Monitoring
-Monitoring script: `/opt/oracle-dba-monitoring/server_health.py`
+## Monitoring
+The monitoring solution publishes custom metrics under the `OracleDBA/Lab` namespace.
 
-Log file: `/var/log/oracle-dba-monitoring.log`
+### Server metrics
+- CPU utilization
+- Memory utilization
+- Disk utilization
+- Swap utilization
 
-Schedule: every five minutes.
+### Oracle database checks
+- Database health
+- Tablespace utilization
+- Blocking sessions
+- Datafile issues
+- Invalid database objects
 
-CloudWatch namespace: `OracleDBA/Lab`
+## CloudWatch alarms
+Three alarms are configured with an 80% threshold:
 
-Metrics include:
-- CPUUsage — 80% threshold
-- MemoryUsage — 80% threshold
-- DiskUsage — 80% threshold
-- SwapUsage — 50% threshold
+| Alarm | Metric | Threshold |
+|---|---|---:|
+| `oracle-dba-high-cpu` | CPUUsage | 80% |
+| `oracle-dba-high-memory` | MemoryUsage | 80% |
+| `oracle-dba-high-disk` | DiskUsage | 80% |
 
-## Oracle Database Monitoring
-Custom metrics include:
-- OracleDatabaseHealthy
-- OracleTablespaceUsedPercent
-- OracleBlockingSessions
-- OracleDatafileIssues
-- OracleInvalidObjects
+Each alarm evaluates two consecutive five-minute periods and requires both datapoints to breach the threshold before entering ALARM.
 
-Tablespace monitoring includes SYSTEM, SYSAUX, TEMP, USERS, and UNDOTBS1.
+## Email notifications
+Amazon SNS topic: `oracle-26ai-alerts`
 
-## CloudWatch Alarms
-Three alarms monitor CPU, memory, and disk utilization for the Oracle 26ai lab instance. The CPU alarm requires two consecutive five-minute datapoints above 80% before entering ALARM state.
-
-A controlled end-to-end alarm-trigger test remains outstanding.
+The email subscription was confirmed, and a test message was successfully published through SNS and received by the subscriber. All three CloudWatch alarms have the SNS topic configured as an alarm action.
 
 ## Validation
-- Confirmed server monitoring script execution.
-- Confirmed cron is active and configured for five-minute execution.
-- Verified custom metrics in CloudWatch.
-- Confirmed CPU, memory, and disk alarms target the Oracle 26ai instance.
-- Verified alarms were in OK state during checks.
+- Verified CloudWatch metrics were being published.
+- Confirmed all three alarms were in the `OK` state during verification.
+- Verified alarm thresholds and SNS alarm actions.
+- Confirmed SNS email delivery with a test notification.
 
-## Useful Commands
+Note: The SNS test validates email delivery. It does not independently prove that a real threshold breach triggered an alarm email.
 
-List project metrics:
+## Business value
+- Improves visibility into database-server resource utilization.
+- Helps DBAs identify capacity and availability concerns earlier.
+- Reduces repetitive manual health-checking tasks.
+- Supports repeatable infrastructure configuration through Terraform.
+- Improves operational awareness through automated email alerts.
 
-```bash
-aws cloudwatch list-metrics --namespace OracleDBA/Lab --region ca-central-1
+## Security
+- Do not commit AWS credentials, private keys, passwords, Terraform state files, or sensitive configuration.
+- Restrict network access using appropriate security groups and least-privilege IAM permissions.
+- Store secrets in an appropriate secrets-management service.
+
+## Repository contents
+The repository contains Terraform configuration and database administration monitoring scripts. Review the project directories for implementation details.
